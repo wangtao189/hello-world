@@ -1,0 +1,899 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	version="2.4"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee   http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+	<!-- 登陆检测 -->
+	<filter>
+		<filter-name>checkLogin</filter-name>
+		<filter-class>com.uqee.filter.LoginFilter</filter-class>
+	</filter>
+	<!-- filter映射，对jsp和.do,.html都判断 -->
+	<filter-mapping>
+		<filter-name>checkLogin</filter-name>
+		<url-pattern>*.html</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>checkLogin</filter-name>
+		<url-pattern>*.jsp</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>checkLogin</filter-name>
+		<url-pattern>*.do</url-pattern>
+	</filter-mapping>
+	<!-- 禁止访问配置文件 -->
+	<filter-mapping>
+		<filter-name>checkLogin</filter-name>
+		<url-pattern>*.xml</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>checkLogin</filter-name>
+		<url-pattern>*.properties</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>checkLogin</filter-name>
+		<url-pattern>*.dat</url-pattern>
+	</filter-mapping>
+	<!-- 配置国际化过滤器 -->
+	<filter>
+		<!-- name-->
+		<filter-name>CheckLanguageFilter</filter-name>
+		<!--实现类 -->
+		<filter-class>com.uqee.filter.CheckLanguageFilter</filter-class>
+	</filter>
+	<!-- filter映射,对jsp和.do都过滤 -->
+	<filter-mapping>
+		<filter-name>CheckLanguageFilter</filter-name>
+		<url-pattern>*.html</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>CheckLanguageFilter</filter-name>
+		<url-pattern>*.jsp</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>CheckLanguageFilter</filter-name>
+		<url-pattern>*.do</url-pattern>
+	</filter-mapping>
+	<!-- 编码过滤器 -->
+	<filter>
+		<!-- name-->
+		<filter-name>SetEncodeFilter</filter-name>
+		<!--实现类 -->
+		<filter-class>com.uqee.filter.SetEncodeFilter</filter-class>
+	</filter>
+	<!-- filter映射,对jsp和.do.html都编码 -->
+	<filter-mapping>
+		<filter-name>SetEncodeFilter</filter-name>
+		<url-pattern>*.html</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>SetEncodeFilter</filter-name>
+		<url-pattern>*.jsp</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>SetEncodeFilter</filter-name>
+		<url-pattern>*.do</url-pattern>
+	</filter-mapping>
+	<!-- url过滤 -->
+	<filter>
+		<filter-name>UrlRewriteFilter</filter-name>
+		<filter-class>org.tuckey.web.filters.urlrewrite.UrlRewriteFilter</filter-class>
+		<init-param>
+			<param-name>logLevel</param-name>
+			<param-value>WARN</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>UrlRewriteFilter</filter-name>
+		<url-pattern>*.html</url-pattern>
+	</filter-mapping>
+	<!-- 验证码 -->
+	<servlet>
+		<servlet-name>LoginCode</servlet-name>
+		<servlet-class>com.uqee.servlet.LoginCode</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>LoginCode</servlet-name>
+		<url-pattern>/ValidateCodeImage</url-pattern>
+	</servlet-mapping>
+	<!-- struts -->
+	<servlet>
+		<servlet-name>action</servlet-name>
+		<servlet-class>org.apache.struts.action.ActionServlet</servlet-class>
+		<init-param>
+			<param-name>config</param-name>
+			<param-value>/WEB-INF/struts-config.xml,/WEB-INF/struts-config-activity.xml</param-value>
+		</init-param>
+		<init-param>
+			<param-name>debug</param-name>
+			<param-value>3</param-value>
+		</init-param>
+		<init-param>
+			<param-name>detail</param-name>
+			<param-value>3</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>action</servlet-name>
+		<url-pattern>*.do</url-pattern>
+	</servlet-mapping>
+
+	<!-- 项目启动时加载数据 -->
+	<servlet>
+		<servlet-name>StartUp</servlet-name>
+		<servlet-class>com.uqee.servlet.StartUp</servlet-class>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>StartUp</servlet-name>
+		<url-pattern>/StartUpInit</url-pattern>
+	</servlet-mapping>
+
+	<!-- 账单下载 -->
+	<servlet>
+		<servlet-name>ExportBill</servlet-name>
+		<servlet-class>com.uqee.servlet.down.ExportBill</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ExportBill</servlet-name>
+		<url-pattern>/exportBill</url-pattern>
+	</servlet-mapping>
+
+	<!-- 账单统计报表下载 -->
+	<servlet>
+		<servlet-name>ExportBillReport</servlet-name>
+		<servlet-class>com.uqee.servlet.down.ExportBillReport</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ExportBillReport</servlet-name>
+		<url-pattern>/exportBillReport</url-pattern>
+	</servlet-mapping>
+
+	<!-- 金币日志下载 -->
+	<servlet>
+		<servlet-name>ExportWatchdog</servlet-name>
+		<servlet-class>com.uqee.servlet.down.ExportWatchdog</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ExportWatchdog</servlet-name>
+		<url-pattern>/exportWatchdog</url-pattern>
+	</servlet-mapping>
+
+	<!-- 根据当前管理员管辖游戏来查看 -->
+	<servlet>
+		<servlet-name>GameList</servlet-name>
+		<servlet-class>com.uqee.servlet.util.GameList</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GameList</servlet-name>
+		<url-pattern>/util/game</url-pattern>
+	</servlet-mapping>
+
+	<!-- 根据当前游戏查看代理商 -->
+	<servlet>
+		<servlet-name>AgentList</servlet-name>
+		<servlet-class>com.uqee.servlet.util.AgentList</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AgentList</servlet-name>
+		<url-pattern>/util/agent</url-pattern>
+	</servlet-mapping>
+
+	<!-- 根据当前游戏查看运营商 -->
+	<servlet>
+		<servlet-name>GameOperatorList</servlet-name>
+		<servlet-class>com.uqee.servlet.util.OperatorListByGame</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GameOperatorList</servlet-name>
+		<url-pattern>/util/operator_game</url-pattern>
+	</servlet-mapping>
+
+	<!-- 根据当前游戏及代理商查看运营商 -->
+	<servlet>
+		<servlet-name>AgentOperatorList</servlet-name>
+		<servlet-class>com.uqee.servlet.util.OperatorListByAgent</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AgentOperatorList</servlet-name>
+		<url-pattern>/util/operator_agent</url-pattern>
+	</servlet-mapping>
+
+	<!-- 根据传来的游戏及代理商查看运营商 -->
+	<servlet>
+		<servlet-name>OperatorListByAgentGame</servlet-name>
+		<servlet-class>com.uqee.servlet.util.OperatorListByAgentGame</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>OperatorListByAgentGame</servlet-name>
+		<url-pattern>/util/operator_agent_game</url-pattern>
+	</servlet-mapping>
+
+	<!-- 根据传来的参数获取代理商列表 -->
+	<servlet>
+		<servlet-name>AgentListByParam</servlet-name>
+		<servlet-class>com.uqee.servlet.util.AgentListByParam</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AgentListByParam</servlet-name>
+		<url-pattern>/util/agent_param</url-pattern>
+	</servlet-mapping>
+
+	<!-- 根据传来的参数获取运营商列表 -->
+	<servlet>
+		<servlet-name>OperatorListByParam</servlet-name>
+		<servlet-class>com.uqee.servlet.util.OperatorListByParam</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>OperatorListByParam</servlet-name>
+		<url-pattern>/util/operator_param</url-pattern>
+	</servlet-mapping>
+
+	<!-- 根据当前游戏及运营商查看服务器 -->
+	<servlet>
+		<servlet-name>ServerList</servlet-name>
+		<servlet-class>com.uqee.servlet.util.ServerList</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ServerList</servlet-name>
+		<url-pattern>/util/server</url-pattern>
+	</servlet-mapping>
+
+	<!-- 根据当前服务器开服数量 -->
+	<servlet>
+		<servlet-name>ServerCountList</servlet-name>
+		<servlet-class>com.uqee.servlet.util.ServerCountList</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ServerCountList</servlet-name>
+		<url-pattern>/util/server_count</url-pattern>
+	</servlet-mapping>
+
+	<!-- 获取当前运营商下所有管理员列表 -->
+	<servlet>
+		<servlet-name>AdminListByOperator</servlet-name>
+		<servlet-class>com.uqee.servlet.util.AdminListByOperator</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AdminListByOperator</servlet-name>
+		<url-pattern>/util/admin_operator</url-pattern>
+	</servlet-mapping>
+
+	<!-- 获取当前运营商下所有管理员列表 -->
+	<servlet>
+		<servlet-name>AdminListByUqee</servlet-name>
+		<servlet-class>com.uqee.servlet.util.AdminListByUqee</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AdminListByUqee</servlet-name>
+		<url-pattern>/util/admin_uqee</url-pattern>
+	</servlet-mapping>
+
+	<!-- 获取当前管理员所管辖的游戏列表 -->
+	<servlet>
+		<servlet-name>PopedomGamesList</servlet-name>
+		<servlet-class>com.uqee.servlet.util.PopedomGamesList</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>PopedomGamesList</servlet-name>
+		<url-pattern>/util/manage_game</url-pattern>
+	</servlet-mapping>
+
+	<!-- 获取当前管理员指定游戏的权限 -->
+	<servlet>
+		<servlet-name>CurrentGamePopedom</servlet-name>
+		<servlet-class>com.uqee.servlet.util.CurrentGamePopedom</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CurrentGamePopedom</servlet-name>
+		<url-pattern>/util/current_game_popedom</url-pattern>
+	</servlet-mapping>
+
+	<!-- 获取当前平台所代理的游戏列表 -->
+	<servlet>
+		<servlet-name>ContractGamesList</servlet-name>
+		<servlet-class>com.uqee.servlet.util.ContractGamesList</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ContractGamesList</servlet-name>
+		<url-pattern>/util/contract_game</url-pattern>
+	</servlet-mapping>
+
+	<!-- 系统对内提供游戏列表查看接口 -->
+	<servlet>
+		<servlet-name>Base_Game</servlet-name>
+		<servlet-class>com.uqee.api.base.Base_Game</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Base_Game</servlet-name>
+		<url-pattern>/base/game</url-pattern>
+	</servlet-mapping>
+
+	<!-- 系统对内提供代理商列表查看接口 -->
+	<servlet>
+		<servlet-name>Base_Agent</servlet-name>
+		<servlet-class>com.uqee.api.base.Base_Agent</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Base_Agent</servlet-name>
+		<url-pattern>/base/agent</url-pattern>
+	</servlet-mapping>
+
+	<!-- 系统对内提供运营商列表查看接口 -->
+	<servlet>
+		<servlet-name>Base_Operator</servlet-name>
+		<servlet-class>com.uqee.api.base.Base_Operator</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Base_Operator</servlet-name>
+		<url-pattern>/base/operator</url-pattern>
+	</servlet-mapping>
+
+	<!-- 系统对内提供运营商列表查看接口 -->
+	<servlet>
+		<servlet-name>Base_Server</servlet-name>
+		<servlet-class>com.uqee.api.base.Base_Server</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Base_Server</servlet-name>
+		<url-pattern>/base/server</url-pattern>
+	</servlet-mapping>
+
+	<!-- 系统对idc开放运营商查看接口,只返回id-name -->
+	<servlet>
+		<servlet-name>GetOperatorToIDC</servlet-name>
+		<servlet-class>com.uqee.api.idc.GetOperator</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetOperatorToIDC</servlet-name>
+		<url-pattern>/game/idc/operator</url-pattern>
+	</servlet-mapping>
+
+	<!-- 获取联盟列表，仅葵花宝典使用 -->
+	<servlet>
+		<servlet-name>League</servlet-name>
+		<servlet-class>com.uqee.servlet.util.League</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>League</servlet-name>
+		<url-pattern>/khbd/league</url-pattern>
+	</servlet-mapping>
+
+	<!-- 获取服务器金币 -->
+	<servlet>
+		<servlet-name>GetServerGold</servlet-name>
+		<servlet-class>com.uqee.servlet.util.GetServerGold</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetServerGold</servlet-name>
+		<url-pattern>/getServerGold</url-pattern>
+	</servlet-mapping>
+
+	<!-- 获取服务器礼品卡分类 -->
+	<servlet>
+		<servlet-name>GetServerGift</servlet-name>
+		<servlet-class>com.uqee.servlet.util.GetServerGift</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetServerGift</servlet-name>
+		<url-pattern>/getServerGift</url-pattern>
+	</servlet-mapping>
+
+	<!-- 检测服务器状态 -->
+	<servlet>
+		<servlet-name>CheckServerStatus</servlet-name>
+		<servlet-class>com.uqee.servlet.util.CheckServerStatus</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CheckServerStatus</servlet-name>
+		<url-pattern>/checkServerStatus</url-pattern>
+	</servlet-mapping>
+
+	<!-- 玩家查询时自动补全 -->
+	<servlet>
+		<servlet-name>AutoCompleteRole</servlet-name>
+		<servlet-class>com.uqee.servlet.util.AutoCompleteRole</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CheckServerStatus</servlet-name>
+		<url-pattern>/autoCompleteRole</url-pattern>
+	</servlet-mapping>
+
+	<!-- =====单服报表接口==== -->
+	<!-- 查看某服务器今日详情 -->
+	<servlet>
+		<servlet-name>ServerTodayReport</servlet-name>
+		<servlet-class>com.uqee.servlet.util.ServerTodayReport</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ServerTodayReport</servlet-name>
+		<url-pattern>/ServerTodayReport</url-pattern>
+	</servlet-mapping>
+
+	<!-- (对平台开放)单服综合报表查询接口  -->
+	<servlet>
+		<servlet-name>CompositeReport_WebSite</servlet-name>
+		<servlet-class>com.uqee.servlet.util.CompositeReport_WebSite</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CompositeReport_WebSite</servlet-name>
+		<url-pattern>/website/report</url-pattern>
+	</servlet-mapping>
+
+	<!-- ======全服报表接口====== -->
+	<!-- 总公用后台接受子公用后台全服报表更新 接口  -->
+	<servlet>
+		<servlet-name>ReportMerger</servlet-name>
+		<servlet-class>com.uqee.report.local.api.ReportMerger</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ReportMerger</servlet-name>
+		<url-pattern>/local/report/report_merger</url-pattern>
+	</servlet-mapping>
+
+	<!-- ======财务对账、充值下载相关==== -->
+	<!-- 下载单服充值明细 -->
+	<servlet>
+		<servlet-name>DownPay</servlet-name>
+		<servlet-class>com.uqee.servlet.pay.DownPay</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DownPay</servlet-name>
+		<url-pattern>/DownPay</url-pattern>
+	</servlet-mapping>
+	<!-- 打包下载 -->
+	<servlet>
+		<servlet-name>BatchDownPay</servlet-name>
+		<servlet-class>com.uqee.servlet.pay.BatchDownPay</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>BatchDownPay</servlet-name>
+		<url-pattern>/BatchDownPay</url-pattern>
+	</servlet-mapping>
+	<!-- 整合下载 -->
+	<servlet>
+		<servlet-name>AppendDownPay</servlet-name>
+		<servlet-class>com.uqee.servlet.pay.AppendDownPay</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AppendDownPay</servlet-name>
+		<url-pattern>/AppendDownPay</url-pattern>
+	</servlet-mapping>
+	<!-- 下载充值明细,按时间下载 -->
+	<servlet>
+		<servlet-name>TimeDownPay</servlet-name>
+		<servlet-class>com.uqee.servlet.pay.TimeDownPay</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>TimeDownPay</servlet-name>
+		<url-pattern>/TimeDownPay</url-pattern>
+	</servlet-mapping>
+	<!-- 账单快速查看 -->
+	<servlet>
+		<servlet-name>OperBillPayDown</servlet-name>
+		<servlet-class>com.uqee.servlet.pay.OperBillPayDown</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>OperBillPayDown</servlet-name>
+		<url-pattern>/billPayDown</url-pattern>
+	</servlet-mapping>
+
+	<!-- ===配置下拉菜单选择服务器和运营商=== -->
+	<!-- 根据游戏获取代理商列表 -->
+	<servlet>
+		<servlet-name>CascadeAgentByGame</servlet-name>
+		<servlet-class>com.uqee.servlet.cascade.CascadeAgentByGame</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CascadeAgentByGame</servlet-name>
+		<url-pattern>/cascadeAgentByGame</url-pattern>
+	</servlet-mapping>
+	<!-- 根据代理商获取运营商列表 -->
+	<servlet>
+		<servlet-name>CascadeOperatorByAgent</servlet-name>
+		<servlet-class>com.uqee.servlet.cascade.CascadeOperatorByAgent</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CascadeOperatorByAgent</servlet-name>
+		<url-pattern>/cascadeOperatorByAgent</url-pattern>
+	</servlet-mapping>
+	<!-- 根据运营商获取服务器列表 -->
+	<servlet>
+		<servlet-name>CaseCadeServerByOperator</servlet-name>
+		<servlet-class>com.uqee.servlet.cascade.CaseCadeServerByOperator</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CaseCadeServerByOperator</servlet-name>
+		<url-pattern>/caseCadeServerByOperator</url-pattern>
+	</servlet-mapping>
+
+	<!-- 独立后台地址访问 -->
+	<servlet>
+		<servlet-name>RemoteSystemList</servlet-name>
+		<servlet-class>com.uqee.servlet.util.RemoteSystemList</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>RemoteSystemList</servlet-name>
+		<url-pattern>/util/remote_system_list</url-pattern>
+	</servlet-mapping>
+
+	<!-- 获取部门列表 -->
+	<servlet>
+		<servlet-name>CalendarGroupList</servlet-name>
+		<servlet-class>com.uqee.servlet.util.CalendarGroupList</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CalendarGroupList</servlet-name>
+		<url-pattern>/util/calendarGroupList</url-pattern>
+	</servlet-mapping>
+
+	<!-- 日历任务监控 -->
+	<servlet>
+		<servlet-name>CalendarMonitor</servlet-name>
+		<servlet-class>com.uqee.servlet.util.CalendarMonitor</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CalendarMonitor</servlet-name>
+		<url-pattern>/util/calendarMonitor</url-pattern>
+	</servlet-mapping>
+	
+	<!-- 在线监控 -->
+	<servlet>
+		<servlet-name>OnilneList</servlet-name>
+		<servlet-class>com.uqee.servlet.util.OnilneList</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>OnilneList</servlet-name>
+		<url-pattern>/log/online</url-pattern>
+	</servlet-mapping>
+
+	<!-- 进度条 -->
+	<servlet>
+		<servlet-name>progress</servlet-name>
+		<servlet-class>com.uqee.servlet.Progress</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>progress</servlet-name>
+		<url-pattern>/progress</url-pattern>
+	</servlet-mapping>
+
+	<!-- 文件下载，传完整的相对路径 -->
+	<servlet>
+		<servlet-name>DownFile</servlet-name>
+		<servlet-class>com.uqee.servlet.down.DownFile</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DownFile</servlet-name>
+		<url-pattern>/DownFile</url-pattern>
+	</servlet-mapping>
+
+	<!-- 服务器礼品卡下载，传完整的相对路径 -->
+	<servlet>
+		<servlet-name>DownGameGift</servlet-name>
+		<servlet-class>com.uqee.servlet.down.DownGameGift</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DownGameGift</servlet-name>
+		<url-pattern>/DownGameGift</url-pattern>
+	</servlet-mapping>
+
+	<!-- 跨服全服卡卡下载，传完整的相对路径 -->
+	<servlet>
+		<servlet-name>DownSuperGift</servlet-name>
+		<servlet-class>com.uqee.servlet.down.DownSuperGift</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DownSuperGift</servlet-name>
+		<url-pattern>/DownSuperGift</url-pattern>
+	</servlet-mapping>
+
+	<!-- 跨平台全服卡卡下载，传完整的相对路径 -->
+	<servlet>
+		<servlet-name>DownOperatorGift</servlet-name>
+		<servlet-class>com.uqee.servlet.down.DownOperatorGift</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DownOperatorGift</servlet-name>
+		<url-pattern>/DownOperatorGift</url-pattern>
+	</servlet-mapping>
+
+	<!-- =====后台活动专用，获取代理商、运营商、服务器列表===== -->
+	<!-- 获取代理商json，用于活动 -->
+	<servlet>
+		<servlet-name>AgentJson</servlet-name>
+		<servlet-class>com.uqee.servlet.json.AgentJson</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AgentJson</servlet-name>
+		<url-pattern>/AgentJson</url-pattern>
+	</servlet-mapping>
+	<!-- 获取运营商json，用于活动 -->
+	<servlet>
+		<servlet-name>OperatorJson</servlet-name>
+		<servlet-class>com.uqee.servlet.json.OperatorJson</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>OperatorJson</servlet-name>
+		<url-pattern>/OperatorJson</url-pattern>
+	</servlet-mapping>
+	<!-- 获取服务器json，用于活动 -->
+	<servlet>
+		<servlet-name>ServerJson</servlet-name>
+		<servlet-class>com.uqee.servlet.json.ServerJson</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ServerJson</servlet-name>
+		<url-pattern>/ServerJson</url-pattern>
+	</servlet-mapping>
+
+	<!-- ===后台对游戏提供的接口=== -->
+	<!-- (卧龙吟写法)游戏发送玩家反馈信息-->
+	<servlet>
+		<servlet-name>WlyFeedBack</servlet-name>
+		<servlet-class>com.uqee.api.local.FeedBackAPI</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>WlyFeedBack</servlet-name>
+		<url-pattern>/SendFeedBack</url-pattern>
+	</servlet-mapping>
+	<!-- (通用写法)游戏发送玩家反馈信息-->
+	<servlet>
+		<servlet-name>CommonFeedBack</servlet-name>
+		<servlet-class>com.uqee.api.local.FeedBackAPI</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CommonFeedBack</servlet-name>
+		<url-pattern>/game/feedback</url-pattern>
+	</servlet-mapping>
+
+	<!-- (卧龙吟写法)全服卡接口 -->
+	<servlet>
+		<servlet-name>WlyGift</servlet-name>
+		<servlet-class>com.uqee.api.local.SuperGift</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>WlyGift</servlet-name>
+		<url-pattern>/HasGift</url-pattern>
+	</servlet-mapping>
+	<!-- (通用写法)全服卡接口  -->
+	<servlet>
+		<servlet-name>CommonGift</servlet-name>
+		<servlet-class>com.uqee.api.local.SuperGift</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CommonGift</servlet-name>
+		<url-pattern>/game/giftcard</url-pattern>
+	</servlet-mapping>
+	<!-- (通用写法)服务器上线接口  -->
+	<servlet>
+		<servlet-name>ServerOnline</servlet-name>
+		<servlet-class>com.uqee.api.local.ServerOnline</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ServerOnline</servlet-name>
+		<url-pattern>/game/serveronline</url-pattern>
+	</servlet-mapping>
+
+	<!-- 服务器检查接口  -->
+	<servlet>
+		<servlet-name>ServerAuth</servlet-name>
+		<servlet-class>com.uqee.api.idc.ServerAuth</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ServerAuth</servlet-name>
+		<url-pattern>/rest/server/internal/auth</url-pattern>
+	</servlet-mapping>
+
+	<!-- 金币日志记录接口 -->
+	<servlet>
+		<servlet-name>Watchdog</servlet-name>
+		<servlet-class>com.uqee.api.local.Watchdog</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Watchdog</servlet-name>
+		<url-pattern>/rest/watchdog/golden</url-pattern>
+	</servlet-mapping>
+
+	<!-- ===========对外奖励接口========== -->
+	<!-- 通用邮件奖励接口(支持卧龙吟、葵花、梦回) -->
+	<servlet>
+		<servlet-name>OpsMailReward</servlet-name>
+		<servlet-class>com.uqee.api.local.OpsMailReward</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>OpsMailReward</servlet-name>
+		<url-pattern>/website/reward</url-pattern>
+	</servlet-mapping>
+
+	<!-- 后台对外提供封禁玩家功能(目前仅卧龙吟越南使用) -->
+	<servlet>
+		<servlet-name>LockPlayer</servlet-name>
+		<servlet-class>com.uqee.api.local.LockPlayer</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>LockPlayer</servlet-name>
+		<url-pattern>/ops/gm/lock</url-pattern>
+	</servlet-mapping>
+
+	<!-- 后台对外提供玩家信息查询功能(目前仅卧龙吟使用) -->
+	<servlet>
+		<servlet-name>GetPlayer</servlet-name>
+		<servlet-class>com.uqee.api.local.GetPlayer</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetPlayer</servlet-name>
+		<url-pattern>/ops/player</url-pattern>
+	</servlet-mapping>
+
+	<!-- 对外提供查看所有运营商列表(支持所有游戏) -->
+	<servlet>
+		<servlet-name>OPSOperator</servlet-name>
+		<servlet-class>com.uqee.api.base.OPS_Operator</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>OPSOperator</servlet-name>
+		<url-pattern>/uqee/baseinfo/operators</url-pattern>
+	</servlet-mapping>
+
+	<!-- 查看所有服务器列表(支持所有游戏) -->
+	<servlet>
+		<servlet-name>OPSServer</servlet-name>
+		<servlet-class>com.uqee.api.base.OPS_Server</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>OPSServer</servlet-name>
+		<url-pattern>/uqee/baseinfo/servers</url-pattern>
+	</servlet-mapping>
+
+	<!-- 根据serverIndex查看所有服务器列表(支持所有游戏) -->
+	<servlet>
+		<servlet-name>ServerIndex</servlet-name>
+		<servlet-class>com.uqee.api.base.OPS_Server_Index</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ServerIndex</servlet-name>
+		<url-pattern>/uqee/baseinfo/server_index</url-pattern>
+	</servlet-mapping>
+
+	<!-- (卧龙吟)后台对泰国提供金币兑换泰铢功能 -->
+	<servlet>
+		<servlet-name>GoldToMoney</servlet-name>
+		<servlet-class>com.uqee.api.local.GoldToMoney</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GoldToMoney</servlet-name>
+		<url-pattern>/paystatistics</url-pattern>
+	</servlet-mapping>
+
+	<!-- (卧龙吟)后台对泰国提供日志下载功能 -->
+	<servlet>
+		<servlet-name>DownGameLog</servlet-name>
+		<servlet-class>com.uqee.api.local.DownGameLog</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DownGameLog</servlet-name>
+		<url-pattern>/download/log</url-pattern>
+	</servlet-mapping>
+
+	<!-- ===========游奇总后台-国外独立后台接口通信========== -->
+	<!-- 国外游戏、代理商、运营商、合同更新接口 -->
+	<servlet>
+		<servlet-name>RemoteBaseAPI</servlet-name>
+		<servlet-class>com.uqee.api.remote.RemoteBaseAPI</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>RemoteBaseAPI</servlet-name>
+		<url-pattern>/remote/remote_base</url-pattern>
+	</servlet-mapping>
+	<!-- 国外服务器更新接口 -->
+	<servlet>
+		<servlet-name>RemoteServerAPI</servlet-name>
+		<servlet-class>com.uqee.api.remote.RemoteServerAPI</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>RemoteServerAPI</servlet-name>
+		<url-pattern>/remote/remote_server</url-pattern>
+	</servlet-mapping>
+	<!-- 游奇服务器更新接口 -->
+	<servlet>
+		<servlet-name>UqeeServerAPI</servlet-name>
+		<servlet-class>com.uqee.api.remote.UqeeServerAPI</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>UqeeServerAPI</servlet-name>
+		<url-pattern>/remote/uqee_server</url-pattern>
+	</servlet-mapping>
+
+	<!-- 创建Spring的监听器 -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:spring-*.xml</param-value>
+	</context-param>
+
+	<!-- 连接池监控 -->
+	<servlet>
+		<servlet-name>DruidStatView</servlet-name>
+		<servlet-class>com.alibaba.druid.support.http.StatViewServlet</servlet-class>
+		<init-param>
+			<param-name>allow</param-name>
+			<param-value>127.0.0.1,10.0.6.5,101.95.5.22,27.115.76.2,122.226.109.155,122.226.109.136</param-value>
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DruidStatView</servlet-name>
+		<url-pattern>/druid/*</url-pattern>
+	</servlet-mapping>
+
+	<!-- 在线监控 -->
+	<listener>
+		<listener-class>com.uqee.filter.OnlineListener</listener-class>
+	</listener>
+
+	<!-- 获取游戏功公告 -->
+	<servlet>
+		<servlet-name>GameNotice</servlet-name>
+		<servlet-class>com.uqee.servlet.GameNotice</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GameNotice</servlet-name>
+		<url-pattern>/game_notice</url-pattern>
+	</servlet-mapping>
+
+	<!-- 渠道下载地址 -->
+	<servlet>
+		<servlet-name>ChannelUrl</servlet-name>
+		<servlet-class>com.uqee.servlet.ChannelDownloadUrl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ChannelUrl</servlet-name>
+		<url-pattern>/channel_download_url</url-pattern>
+	</servlet-mapping>
+
+	<!-- 错误日志临时接口 -->
+	<servlet>
+		<servlet-name>MSErrorLog</servlet-name>
+		<servlet-class>com.uqee.servlet.temp.ErrorLog</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>MSErrorLog</servlet-name>
+		<url-pattern>/ms/error</url-pattern>
+	</servlet-mapping>
+
+	<!-- 奔跑查询数据库 -->
+	<servlet>
+		<servlet-name>GameDB</servlet-name>
+		<servlet-class>com.uqee.servlet.temp.GameDB</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GameDB</servlet-name>
+		<url-pattern>/db</url-pattern>
+	</servlet-mapping>
+
+	<!-- 奔跑对外报表接口 -->
+	<servlet>
+		<servlet-name>DailyReport</servlet-name>
+		<servlet-class>com.uqee.servlet.temp.DailyReport</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DailyReport</servlet-name>
+		<url-pattern>/report/daily_report</url-pattern>
+	</servlet-mapping>
+
+	<!--
+		错误页面,集成nginx时，此处尽量关闭，或重写404、500跳转规则-->
+	<error-page>
+		<error-code>404</error-code>
+		<location>/error/404.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>500</error-code>
+		<location>/error/500.jsp</location>
+	</error-page>
+
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+</web-app>
